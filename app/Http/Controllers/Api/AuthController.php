@@ -33,7 +33,7 @@ class AuthController extends Controller
                 'device_id' => auth()->user()->device_id,
                 'created_at' => auth()->user()->created_at,
                 'updated_at' => auth()->user()->updated_at,
-                'access_token' => $token, // Memasukkan token JWT ke dalam data pengguna
+                'token' => $token, // Memasukkan token JWT ke dalam data pengguna
             ],
             'message' => "Authentikasi sukses"
         ]);
