@@ -54,25 +54,47 @@ class AuthController extends Controller
 
         return response()->json($userData);
     }
-    public function scanQRcodeAbsenMasu(Request $request)
+    public function scanQRcodeAbsenMasuk(Request $request)
     {
 
-        $user = auth()->user();    
-    $pegawaiId = $user->pegawai_id;
-    $jenisAbsen = $user->Pegawai->jenis_absen;    
-    $qrCode = $request->input('qrcode');    
-    if ($qrCode === 'qrcodeabsenmasukdayakuraja') {
-        $waktuAbsen = now();
-        $absensi = new Absensi();
-        $absensi->pegawai_id = $pegawaiId;
-        $absensi->absensi = $waktuAbsen;
-        $absensi->jenis_absen = $jenisAbsen;
-        $absensi->status_absen = 1;
-        $absensi->save();
+        $user = auth()->user();
+        $pegawaiId = $user->pegawai_id;
+        $jenisAbsen = $user->Pegawai->jenis_absen;
+        $qrCode = $request->input('qrcode');
+        if ($qrCode === 'qrcodeabsenmasuk') {
+            $waktuAbsen = now();
+            $absensi = new Absensi();
+            $absensi->pegawai_id = $pegawaiId;
+            $absensi->absensi = $waktuAbsen;
+            $absensi->jenis_absen = $jenisAbsen;
+            $absensi->status_absen = 0;
+            $absensi->save();
 
-        return response()->json(['message' => 'Absensi berhasil disimpan'], 200);
-    } else {
-        return response()->json(['message' => 'QR code tidak valid'], 400);
+            return response()->json(['message' => 'Absensi Masuk berhasil'], 200);
+        } else {
+            return response()->json(['message' => 'QR code tidak valid'], 400);
+        }
     }
+
+    public function scanQRcodeAbsenPulang(Request $request)
+    {
+        $user = auth()->user();
+        $pegawaiId = $user->pegawai_id;
+        $jenisAbsen = $user->Pegawai->jenis_absen;
+        $qrCode = $request->input('qrcode');
+        if ($qrCode === 'qrcodeabsenpulang') {
+            $waktuAbsen = now();
+            $absensi = new Absensi();
+            $absensi->pegawai_id = $pegawaiId;
+            $absensi->absensi = $waktuAbsen;
+            $absensi->jenis_absen = $jenisAbsen;
+            $absensi->status_absen = 1;
+            $absensi->save();
+
+            return response()->json(['message' => 'Absensi Pulang Berhasil'], 200);
+        } else {
+            return response()->json(['message' => 'QR code tidak valid'], 400);
+        }
+
     }
 }
