@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('pegawai_id');
             $table->string('device_id')->nullable();
             $table->dateTime('absensi');
-            $table->rememberToken();
+            $table->foreignId('jenis_absen');
+            $table->boolean('status_absen');
             $table->timestamps();
         });
         

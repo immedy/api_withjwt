@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\absensi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -48,8 +49,28 @@ class AuthController extends Controller
             'pegawai_id' => $user->pegawai_id,
             'nama_lengkap' => $user->Pegawai->nama,
             'nip' => $user->Pegawai->nip,
+            'jenis_absen' => $user->Pegawai->jenis_absen,
         ];
 
         return response()->json($userData);
+    }
+    public function scanQRcode(Request $request)
+    {
+        $qrCode = $request->input('qrcode');
+
+        $userData = $request->input('userData');
+        if ($qrCode === 'qrcodeabsenmasukdayakuraja'){
+            $pegawaiId = $userData['pegawai_id'];
+            $waktuAbsen = now();
+            $jenisAbsen = $userData['jenis_absen'];
+            $absensi = new absensi();
+            $absensi -> pegawai_id = $pegawaiId;
+            $absensi -> absensi = $waktuAbsen;
+            $absensi -> jenis_absen = $jenisAbsen;
+            $absensi -> save();
+            return response()->json(['message' => 'Absensi Berhasil disimpan'], 200);
+            } else{
+                return response()->json(['Massage' => 'Data Tidak Tersimpan'], 400);
+            }
     }
 }
