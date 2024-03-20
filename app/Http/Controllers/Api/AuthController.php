@@ -70,7 +70,11 @@ class AuthController extends Controller
             $absensi->status_absen = 0;
             $absensi->save();
 
-            return response()->json(['message' => 'Absensi Masuk berhasil'], 200);
+            return response()->json([
+                'success' => true,
+                'data'=> $absensi,
+                'message' => 'Absensi Masuk berhasil'
+            ], 200);
         } else {
             return response()->json(['message' => 'QR code tidak valid'], 400);
         }
@@ -91,7 +95,11 @@ class AuthController extends Controller
             $absensi->status_absen = 1;
             $absensi->save();
 
-            return response()->json(['message' => 'Absensi Pulang Berhasil'], 200);
+            return response()->json([
+                'success' => true,
+                'data'=> $absensi,
+                'message' => 'Absensi Pulang Berhasil'
+            ], 200);
         } else {
             return response()->json(['message' => 'QR code tidak valid'], 400);
         }
