@@ -18,5 +18,5 @@ use Illuminate\Support\Facades\Route;
 route::controller(AuthController::class)->group(function(){
     route::post('login','login');
     route::get('checkAutentikasi','getUser');
-    route::post('postAbsen','scanQRcode');
+    route::post('postAbsenMasuk','scanQRcodeAbsenMasu');
 });

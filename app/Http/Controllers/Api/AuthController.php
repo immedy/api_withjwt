@@ -54,23 +54,25 @@ class AuthController extends Controller
 
         return response()->json($userData);
     }
-    public function scanQRcode(Request $request)
+    public function scanQRcodeAbsenMasu(Request $request)
     {
-        $qrCode = $request->input('qrcode');
 
-        $userData = $request->input('userData');
-        if ($qrCode === 'qrcodeabsenmasukdayakuraja'){
-            $pegawaiId = $userData['pegawai_id'];
-            $waktuAbsen = now();
-            $jenisAbsen = $userData['jenis_absen'];
-            $absensi = new absensi();
-            $absensi -> pegawai_id = $pegawaiId;
-            $absensi -> absensi = $waktuAbsen;
-            $absensi -> jenis_absen = $jenisAbsen;
-            $absensi -> save();
-            return response()->json(['message' => 'Absensi Berhasil disimpan'], 200);
-            } else{
-                return response()->json(['Massage' => 'Data Tidak Tersimpan'], 400);
-            }
+        $user = auth()->user();    
+    $pegawaiId = $user->pegawai_id;
+    $jenisAbsen = $user->Pegawai->jenis_absen;    
+    $qrCode = $request->input('qrcode');    
+    if ($qrCode === 'qrcodeabsenmasukdayakuraja') {
+        $waktuAbsen = now();
+        $absensi = new Absensi();
+        $absensi->pegawai_id = $pegawaiId;
+        $absensi->absensi = $waktuAbsen;
+        $absensi->jenis_absen = $jenisAbsen;
+        $absensi->status_absen = 1;
+        $absensi->save();
+
+        return response()->json(['message' => 'Absensi berhasil disimpan'], 200);
+    } else {
+        return response()->json(['message' => 'QR code tidak valid'], 400);
+    }
     }
 }
