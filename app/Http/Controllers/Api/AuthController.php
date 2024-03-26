@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\absensi;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
 
 class AuthController extends Controller
@@ -22,7 +24,6 @@ class AuthController extends Controller
         }
         return $this->respondWithToken($token);
     }
-
     protected function respondWithToken($token)
     {
         return response()->json([
@@ -72,7 +73,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data'=> $absensi,
+                'data' => $absensi,
                 'message' => 'Absensi Masuk berhasil'
             ], 200);
         } else {
@@ -97,12 +98,43 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data'=> $absensi,
+                'data' => $absensi,
                 'message' => 'Absensi Pulang Berhasil'
             ], 200);
         } else {
             return response()->json(['message' => 'QR code tidak valid'], 400);
         }
+    }
+    public function auth()
+    {
+        return $this->user()->can('update', $this->user());
+    }
 
+    public function rules()
+    {
+        $user = $this->user()->id;
+        return [
+            'device_id' => 'required|string|unique:users,device_id,' . $user,
+        ];
+    }    
+    public function addDeviceId(Request $request)
+    {
+        
+        $user = $request->user();
+
+        $validated = $request->validate([
+            'device_id' => 'required|string|unique:users,device_id,'.$user->id,
+        ], [
+            'unique_device_id_check' => 'This device already exists for the user.',
+        ]);
+
+        $user->device_id = $validated['device_id'];
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'device_id' => $user->device_id,
+            'message' => 'Device ID updated successfully',
+        ], 200);
     }
 }

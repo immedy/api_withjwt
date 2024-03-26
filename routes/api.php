@@ -20,4 +20,5 @@ route::controller(AuthController::class)->group(function(){
     route::get('checkAutentikasi','getUser');
     route::post('postAbsenMasuk','scanQRcodeAbsenMasuk');
     route::post('postAbsenPulang','scanQRcodeAbsenPulang');
+    route::post('addDeviceId','addDeviceId');
 });
