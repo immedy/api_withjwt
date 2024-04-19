@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('pegawai_id');
             $table->string('device_id')->nullable();
-            $table->dateTime('absensi');
+            $table->date('absensi_tanggal');
+            $table->time('absensi_waktu');
             $table->foreignId('jenis_absen');
             $table->boolean('status_absen');
             $table->timestamps();
