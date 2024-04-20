@@ -12,6 +12,8 @@ use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
+    public $connection = 'mysql_2';
+    public $table = 'users';
     public function getJWTIdentifier()
     {
         return $this->getKey();

@@ -22,8 +22,30 @@ class AuthController extends Controller
         if (!$token = Auth()->attempt($validasiData)) {
             return response()->json(['error' => 'Unauthorized'], 400);
         }
+
+        $user = Auth::user();
+        $device_id = $request->device_id;
+
+        // Validasi device_id
+        $userWithDeviceId = User::where('device_id', $device_id)->first();
+        if ($userWithDeviceId && $userWithDeviceId->id != $user->id) {
+            return response()->json(['error' => 'Device not allowed'], 403);
+        }
+
+        // Simpan device_id ke dalam user
+        if (empty($user->device_id)) {
+            $user->device_id = $device_id;
+            $user->save();
+        } else {
+            // Periksa device_id
+            if ($user->device_id != $device_id) {
+                return response()->json(['error' => 'Device not allowed'], 403);
+            }
+        }
+
         return $this->respondWithToken($token);
     }
+
     protected function respondWithToken($token)
     {
         return response()->json([
@@ -47,8 +69,8 @@ class AuthController extends Controller
 
         $userData = [
             'id' => $user->id,
-            'pegawai_id' => $user->pegawai_id,
-            'nama_lengkap' => $user->Pegawai->nama,
+            'pegawai_id' =>  $user->pegawai_id,
+            'nama_lengkap' => $user->Pegawai->gelar_depan . '. ' . $user->Pegawai->nama . ', ' . $user->Pegawai->gelar_belakang,
             'nip' => $user->Pegawai->nip,
             'jenis_absen' => $user->Pegawai->jenis_absen,
         ];
@@ -116,14 +138,14 @@ class AuthController extends Controller
         return [
             'device_id' => 'required|string|unique:users,device_id,' . $user,
         ];
-    }    
+    }
     public function addDeviceId(Request $request)
     {
-        
+
         $user = $request->user();
 
         $validated = $request->validate([
-            'device_id' => 'required|string|unique:users,device_id,'.$user->id,
+            'device_id' => 'required|string|unique:users,device_id,' . $user->id,
         ], [
             'unique_device_id_check' => 'This device already exists for the user.',
         ]);

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class pegawai extends Model
 {
     use HasFactory;
+    public $connection = 'mysql_2';
+    public $table = 'pegawais';
 }
