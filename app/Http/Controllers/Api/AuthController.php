@@ -7,8 +7,7 @@ use App\Models\absensi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Response;
+
 
 class AuthController extends Controller
 {
@@ -85,10 +84,12 @@ class AuthController extends Controller
         $jenisAbsen = $user->Pegawai->jenis_absen;
         $qrCode = $request->input('qrcode');
         if ($qrCode === 'qrcodeabsenmasuk') {
-            $waktuAbsen = now();
+            $tanggalabsen = now()->format('Y-m-d');
+            $jamabsen = now()->format('H:i:s');
             $absensi = new Absensi();
             $absensi->pegawai_id = $pegawaiId;
-            $absensi->absensi = $waktuAbsen;
+            $absensi->absensi_tanggal = $tanggalabsen;
+            $absensi->absensi_waktu = $jamabsen;
             $absensi->jenis_absen = $jenisAbsen;
             $absensi->status_absen = 0;
             $absensi->save();
@@ -110,10 +111,12 @@ class AuthController extends Controller
         $jenisAbsen = $user->Pegawai->jenis_absen;
         $qrCode = $request->input('qrcode');
         if ($qrCode === 'qrcodeabsenpulang') {
-            $waktuAbsen = now();
+            $tanggalabsen = now()->format('Y-m-d');
+            $jamabsen = now()->format('H:i:s');
             $absensi = new Absensi();
             $absensi->pegawai_id = $pegawaiId;
-            $absensi->absensi = $waktuAbsen;
+            $absensi->absensi_tanggal = $tanggalabsen;
+            $absensi->absensi_waktu = $jamabsen;
             $absensi->jenis_absen = $jenisAbsen;
             $absensi->status_absen = 1;
             $absensi->save();
