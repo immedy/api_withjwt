@@ -17,7 +17,7 @@ class AuthController extends Controller
     }
     public function login(Request $request)
     {
-        $validasiData = $request->only(['username', 'password', 'device_id']);
+        $validasiData = $request->only(['username', 'password']);
         if (!$token = Auth()->attempt($validasiData)) {
             return response()->json(['error' => 'Unauthorized'], 400);
         }
@@ -41,9 +41,6 @@ class AuthController extends Controller
                 return response()->json(['error' => 'Device not allowed'], 403);
             }
         }
-
-        return $this->respondWithToken($token);
-
         return $this->respondWithToken($token);
     }
 
