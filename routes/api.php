@@ -21,4 +21,5 @@ route::controller(AuthController::class)->group(function(){
     route::post('postAbsenMasuk','scanQRcodeAbsenMasuk');
     route::post('postAbsenPulang','scanQRcodeAbsenPulang');
     route::post('addDeviceId','addDeviceId');
+    route::get('listEmployee','listEmployee');
 });

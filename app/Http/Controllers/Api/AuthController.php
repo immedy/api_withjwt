@@ -65,7 +65,6 @@ class AuthController extends Controller
     public function getUser(Request $request)
     {
         $user = auth()->user(); // Mendapatkan objek user yang terautentikasi
-
         $userData = [
             'id' => $user->id,
             'pegawai_id' =>  $user->pegawai_id,
@@ -161,5 +160,13 @@ class AuthController extends Controller
             'device_id' => $user->device_id,
             'message' => 'Device ID updated successfully',
         ], 200);
+    }
+
+    public function listEmployee()
+    {
+        $user = Auth()->user();
+        $employee = absensi::where('pegawai_id', $user->pegawai_id)->get();
+        return response()->json($employee);
+
     }
 }
