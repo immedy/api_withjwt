@@ -41,7 +41,6 @@ class AuthController extends Controller
                 return response()->json(['error' => 'Device not allowed'], 403);
             }
         }
-
         return $this->respondWithToken($token);
     }
 
