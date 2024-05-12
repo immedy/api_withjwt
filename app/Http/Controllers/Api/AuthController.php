@@ -164,7 +164,7 @@ class AuthController extends Controller
     public function listEmployee()
     {
         $user = Auth()->user();
-        $employee = absensi::where('pegawai_id', $user->pegawai_id)->get();
+        $employee = absensi::where('pegawai_id', $user->pegawai_id)->latest()->paginate(40);
         return response()->json($employee);
 
     }
