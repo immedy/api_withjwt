@@ -165,6 +165,13 @@ class AuthController extends Controller
     {
         $user = Auth()->user();
         $employee = absensi::where('pegawai_id', $user->pegawai_id)->latest()->paginate(40);
+    
+        // Ubah status_absen dari 0 dan 1 menjadi "Masuk" dan "Pulang"
+        $employee->getCollection()->transform(function ($item) {
+            $item->status_absen = $item->status_absen == 0 ? 'Masuk' : 'Pulang';
+            return $item;
+        });
+    
         return response()->json($employee);
 
     }
