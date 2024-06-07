@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\absensi;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -169,6 +170,7 @@ class AuthController extends Controller
         // Ubah status_absen dari 0 dan 1 menjadi "Masuk" dan "Pulang"
         $employee->getCollection()->transform(function ($item) {
             $item->status_absen = $item->status_absen == 0 ? 'Masuk' : 'Pulang';
+            $item->absensi_tanggal = Carbon::parse()->isoFormat('dddd, D MMMM Y');
             return $item;
         });
     
